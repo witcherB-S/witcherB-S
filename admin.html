@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>حساب المسؤول</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h2>مرحباً، مسؤول</h2>
+        <form id="adminForm">
+            <label for="targetAccountNumber">أدخل رقم الحساب المراد تعديل الرصيد له:</label>
+            <input type="text" id="targetAccountNumber" name="targetAccountNumber" required>
+            <label for="amount">المبلغ:</label>
+            <input type="number" id="amount" name="amount" required>
+            <button type="submit">إضافة/خصم الرصيد</button>
+        </form>
+        <div id="adminMessage"></div>
+
+        <h2>إدارة المتجر</h2>
+        <form id="productForm">
+            <label for="productName">اسم السلعة:</label>
+            <input type="text" id="productName" name="productName" required>
+            <label for="productPrice">سعر السلعة:</label>
+            <input type="number" id="productPrice" name="productPrice" required>
+            <button type="submit">إضافة/تعديل السلعة</button>
+        </form>
+        <div id="productMessage"></div>
+
+        <h2>حذف السلعة</h2>
+        <select id="deleteProductSection"></select> <!-- قسم جديد لعرض السلع -->
+
+        <div id="storeContainer">
+            <!-- المنتجات ستضاف هنا ديناميكياً بواسطة JavaScript -->
+        </div>
+    </div>
+    <script src="scripts.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const adminForm = document.getElementById('adminForm');
+            const productForm = document.getElementById('productForm');
+            const deleteProductSection = document.getElementById('deleteProductSection');
+            const storeContainer = document.getElementById('storeContainer');
+
+            // تحميل السلع عند تحميل الصفحة
+            renderProducts();
+
+            function renderProducts() {
+                const products = JSON.parse(localStorage.getItem('products')) || [];
+                deleteProductSection.innerHTML = '';
+
+                products.forEach((product, index) => {
+                    const option = document.createElement('option');
+                    option.text = product.name;
+                    option.value = index.toString();
+                    deleteProductSection.appendChild(option);
+                });
+            }
+
+            // حذف السلعة عند تقديم النموذج
+            if (deleteProductSection) {
+                deleteProductSection.addEventListener('change', function() {
+                    const selectedIndex = deleteProductSection.selectedIndex;
+                    const products = JSON.parse(localStorage.getItem('products')) || [];
+                    if (selectedIndex !== -1) {
+                        const indexToRemove = parseInt(deleteProductSection.options[selectedIndex].value);
+                        products.splice(indexToRemove, 1);
+                        localStorage.setItem('products', JSON.stringify(products));
+                        renderProducts(); // تحديث قائمة السلع بعد الحذف
+                    }
+                });
+            }
+
+            // إضافة زر لحذف السلعة
+            const deleteButton = document.createElement('button');
+            deleteButton.textContent = 'حذف السلعة';
+            deleteButton.addEventListener('click', function() {
+                const selectedIndex = deleteProductSection.selectedIndex;
+                if (selectedIndex !== -1) {
+                    const indexToRemove = parseInt(deleteProductSection.options[selectedIndex].value);
+                    products.splice(indexToRemove, 1);
+                    localStorage.setItem('products', JSON.stringify(products));
+                    renderProducts(); // تحديث قائمة السلع بعد الحذف
+                }
+            });
+            document.body.appendChild(deleteButton);
+        });
+    </script>
+</body>
+</html>

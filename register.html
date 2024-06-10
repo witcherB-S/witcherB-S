@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تسجيل جديد</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h2>تسجيل جديد</h2>
+        <form id="registerForm">
+            <label for="name">الاسم:</label>
+            <input type="text" id="name" name="name" required>
+            <label for="union">اسم النقابة:</label>
+            <input type="text" id="union" name="union" required>
+            <label for="phone">رقم الهاتف:</label>
+            <input type="tel" id="phone" name="phone" required>
+            <button type="submit">تسجيل</button>
+        </form>
+        <div id="registerMessage"></div>
+    </div>
+    <script src="scripts.js"></script>
+</body>
+</html>
